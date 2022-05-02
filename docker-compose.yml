@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  express:
+    build:
+      context: ./Dockerfiles
+      dockerfile: express.dockerfile
+    image: todo-socket/express
+    container_name: todo-socket_express
+    restart: always
+    tty: true # keep container running
+    working_dir: /var/www/todo-socket/express
+    volumes:
+      - ./express:/var/www/todo-socket/express
+    ports:
+      - 3000:3000
+    networks:
+      - todo-socket
+
+  vue:
+    build:
+      context: ./Dockerfiles
+      dockerfile: vue.dockerfile
+    image: todo-socket/vue
+    container_name: todo-socket_vue
+    restart: always
+    tty: true # keep container running
+    working_dir: /var/www/todo-socket/vue
+    volumes:
+      - ./vue:/var/www/todo-socket/vue
+    ports:
+      - 8080:8080
+
+  mysql:
+    build:
+      context: ./Dockerfiles
+      dockerfile: mysql.dockerfile
+    image: todo-socket/mysql
+    container_name: todo-socket_mysql
+    restart: always
+    working_dir: /var/lib/mysql
+    volumes:
+      - ./mysql:/var/lib/mysql
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    networks:
+      - todo-socket
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+networks:
+  todo-socket:

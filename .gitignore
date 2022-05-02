@@ -1,0 +1,8 @@
+# dependencies
+node_modules
+
+# development only
+mysql
+
+# build-stage files
+build
